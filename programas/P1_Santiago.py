@@ -1,7 +1,7 @@
 from microbit import *
-import neopixel 
 
-np = neopixel.NeoPixel(pin13, 2)
-
-led = pin14
-np.clear()
+while True:
+    pin1.write_digital(1)
+    sleep(500)
+    pin1.write_digital(0)
+    sleep(500)
