@@ -1,0 +1,32 @@
+from microbit import *
+
+# Configura a frecuencia do servo a 50 Hz (período de 20 ms)
+pin2.set_analog_period(20)
+
+# Función para converter graos a sinal PWM para servos en micro:bit
+def grados_a_pwm(angulo):
+    # Escala típica para servos:
+    # 0º ≈ 26, 90º ≈ 77, 180º ≈ 128
+    return int(26 + (angulo / 180) * (128 - 26))
+
+angulo = 0  # Comezamos a 0º
+modo_mellorado = True  # Cambia a False se queres o modo simple (alternancia 0º/90º)
+
+pin2.write_analog(grados_a_pwm(angulo))  # Poñemos o servo en 0º
+
+while True:
+    if button_a.was_pressed():
+        angulo = 0
+        pin2.write_analog(grados_a_pwm(angulo))  # Servo a 0º
+
+    if button_b.was_pressed():
+        if modo_mellorado:
+            angulo += 10
+            if angulo > 90:
+                angulo = 0
+        else:
+            # Alternancia entre 0º e 90º
+            angulo = 90 if angulo == 0 else 0
+
+        pin2.write_analog(grados_a_pwm(angulo))  # Servo ao novo ángulo
+        sleep(300)  # Pausa para evitar lectura dobre do botónº
