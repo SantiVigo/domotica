@@ -1,32 +1,38 @@
-#include <Servo.h>
+"""Programa completo.............."""
+Autor: Santiago Pereira
+Data: 5 de maio 
 
-Servo miServo;
-const int pinServo = 2;      // Pin do servo
-const int pinBoton = 8;      // Pin do botón B
-int estadoServo = 0;         // 0° ou 90°
-bool ultimoEstadoBoton = false;
+from microbit import *
 
-void setup() {
-  miServo.attach(pinServo);
-  pinMode(pinBoton, INPUT);
-  miServo.write(0);          // Comeza en 0°
-}
+pin2.set_analog_period(20)  # Configura a frecuencia do sinal PWM para o servo (20 ms = 50 Hz)
 
-void loop() {
-  bool estadoBoton = digitalRead(pinBoton);
+while True:
+    if button_a.was_pressed():   # Detecta se se premeu o botón A
+        pin2.write_analog(1)     # Valor analóxico moi baixo → xira o servo a 0º
 
-  // Detecta o cambio de estado do botón
-  if (estadoBoton && !ultimoEstadoBoton) {
-    // Cambia á posición oposta
-    if (estadoServo == 0) {
-      miServo.write(90);
-      estadoServo = 90;
-    } else {
-      miServo.write(0);
-      estadoServo = 0;
-    }
-    delay(300); // Anti-rebote e evita repeticións
-  }
+    if button_b.was_pressed():   # Detecta se se premeu o botón B
+        pin2.write_analog(180)   # Valor analóxico máis alto → xira o servo a 180º
 
-  ultimoEstadoBoton = estadoBoton;
-}
+
+buscar práctica do botón (en este caso botón B)
+
+from microbit import *
+
+pin2.set_analog_period(20)  # Configura o período PWM para controlar o servo
+
+angulo = 0  # Comeza a 0º
+pin2.write_analog(0)  # Servo en posición inicial 0º
+
+while True:
+    if button_b.was_pressed():  # Se se preme o botón B
+        if angulo == 0:
+            angulo = 90         # Se está a 0º, pasa a 90º
+        else:
+            angulo = 0          # Se está a 90º, volve a 0º
+        
+        # Conversión aproximada de graos a sinal PWM:
+        # write_analog(0) → 0º, write_analog(90) → ~90º
+        pin2.write_analog(angulo)
+        sleep(500)  # Pequena pausa para evitar rebotes
+
+
