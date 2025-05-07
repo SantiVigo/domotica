@@ -2,35 +2,35 @@
 Autores: Santiago Pereira Briceño
 Data: 30/04/2025"""
 
-from microbit import *
-import neopixel
+#include <Servo.h>               // [1] Inclúe a libraría Servo para controlar o servomotor
 
-# Definir o número de LEDs e o pin ao que están conectados
-num_leds = 5  # Número de LEDs
-pin = pin0  # Pin ao que están conectados os LEDs
+Servo servoMotor;               // [2] Crea un obxecto Servo chamado 'servoMotor'
 
-# Crear o obxecto NeoPixel
-leds = neopixel.NeoPixel(pin, num_leds)
+const int botonB = 8;           // [3] Define o pin 8 como o pin onde está conectado o botón
+int angulo = 0;                 // [4] Variable que garda o ángulo actual do servo
+bool estadoAnterior = HIGH;    // [5] Variable para detectar cambios de estado no botón
 
-# Función para cambiar a cor dos LEDs
-def change_color(red, green, blue):
-    for i in range(num_leds):
-        leds[i] = (red, green, blue)
-    leds.show()
+void setup() {
+  servoMotor.attach(2);         // [6] Conecta o servo ao pin analóxico 2
+  pinMode(botonB, INPUT_PULLUP); // [7] Configura o botón como entrada con resistencia interna
+  servoMotor.write(0);          // [8] Establece o servo ao comezo en 0º
+}
 
-# Bucle principal
-while True:
-    # Cor azul
-    for value in range(0, 256, 5):  # Aumentar de 5 en 5 ata 255
-        change_color(0, 0, value)  # Cor azul
-        sleep(50)  # Esperar 50 milisegundos
+void loop() {
+  bool estadoActual = digitalRead(botonB); // [9] Le o estado actual do botón
+
+  // [10] Comproba se o botón foi premido (pasou de non premido a premido)
+  if (estadoAnterior == HIGH && estadoActual == LOW) {
     
-    # Cor vermella
-    for value in range(0, 256, 5):  # Aumentar de 5 en 5 ata 255
-        change_color(value, 0, 0)  # Cor vermella
-        sleep(50)  # Esperar 50 milisegundos
-    
-    # Cor verde
-    for value in range(0, 256, 5):  # Aumentar de 5 en 5 ata 255
-        change_color(0, value, 0)  # Cor verde
-        sleep(50)  # Esperar 50 milisegundos
+    angulo += 10;               // [11] Aumenta o ángulo en 10º
+
+    if (angulo > 90) {          // [12] Se pasa de 90º, volve a 0º
+      angulo = 0;
+    }
+
+    servoMotor.write(angulo);  // [13] Manda o novo ángulo ao servo
+    delay(300);                // [14] Engade unha pausa para evitar lectura múltiple do mesmo toque
+  }
+
+  estadoAnterior = estadoActual; // [15] Actualiza o estado anterior para a próxima lectura
+}
