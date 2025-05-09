@@ -2,7 +2,6 @@
 Autores: Santiago Pereira 
 Data: 30/04/2025
 
-
 from microbit import *
 import machine
 
