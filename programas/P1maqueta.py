@@ -4,40 +4,44 @@ Data: 30/04/2025
 """
 
 import time
+from machine import Pin
+import neopixel
 
-# Este bucle infinito simula el funcionamiento continuo del sistema
+# Configuración del pin del ventilador (relé)
+ventilador_pin = Pin(2, Pin.OUT)  # Cambia por el pin correcto de tu placa
+ventilador_pin.value(0)  # Ventilador apagado inicialmente
+
+# Configuración del LED Neopixel
+np_pin = Pin(4, Pin.OUT)  # Cambia por el pin correcto donde está el Neopixel
+np = neopixel.NeoPixel(np_pin, 1)
+
+# Simulamos la lectura de temperatura con un valor fijo que puedes modificar para probar
+temperatura = 23.0  # Cambia este valor para probar distintas temperaturas
+
 while True:
-    try:
-        # Simulamos la lectura de la temperatura.
-        # En un sistema real, aquí leerías un sensor de temperatura (ej. DHT11/22).
-        temperatura_str = input("Introduce la temperatura actual en grados Celsius: ")
-        temperatura = float(temperatura_str)
+    # Actualizar estado según temperatura
+    if temperatura > 24:
+        # LED rojo
+        np[0] = (255, 0, 0)
+        np.write()
+        # Activar ventilador
+        ventilador_pin.value(1)
+    else:
+        # LED verde
+        np[0] = (0, 255, 0)
+        np.write()
+        # Apagar ventilador
+        ventilador_pin.value(0)
 
-        print(f"\nTemperatura actual: {temperatura}°C")
+    # Mostrar estado para debug por consola
+    print("Temperatura:", temperatura)
+    if ventilador_pin.value() == 1:
+        print("Ventilador activado, LED rojo")
+    else:
+        print("Ventilador apagado, LED verde")
 
-        # Condición para temperatura alta (superior a 24º)
-        if temperatura > 24:
-            print("Temperatura superior a 24°C.")
-            print("LED Neopixel: ROJO")
-            print("Ventilador: ENCENDIDO (Relé ACTIVADO)")
-            # Aquí iría el código real para:
-            # 1. Configurar los Neopixel en rojo.
-            # 2. Activar el relé para encender el ventilador.
-        # Condición para temperatura baja (24º o inferior)
-        else:
-            print("Temperatura 24°C o inferior.")
-            print("LED Neopixel: VERDE")
-            print("Ventilador: APAGADO (Relé DESACTIVADO)")
-            # Aquí iría el código real para:
-            # 1. Configurar los Neopixel en verde.
-            # 2. Desactivar el relé para apagar el ventilador.
+    time.sleep(5)
 
-        print("-" * 30) # Separador para mejor legibilidad
-        time.sleep(2)  # Pequeña pausa antes de la siguiente lectura simulada
+    # Actualiza temperatura variable aquí para probar cambios o añádelo lectura real de sensor
+    # temperatura = leer_sensor()
 
-    except ValueError:
-        print("Entrada inválida. Por favor, introduce un número para la temperatura.")
-        print("-" * 30)
-    except KeyboardInterrupt:
-        print("\nPrograma terminado por el usuario.")
-        break # Sale del bucle infinito si el usuario presiona Ctrl+C
