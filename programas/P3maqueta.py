@@ -5,34 +5,46 @@ Data: 30/04/2025
 
 import time
 
-# Asumiendo que 'LED' y 'RINGTONE' son predefinidos o accesibles en el entorno
-# Por ejemplo, en un entorno como MicroPython o Arduino (con sintaxis Python-like)
-# LED_PIN = 2  # Asumiendo que el LED está conectado al pin 2
-# BUTTON_PIN = 3 # Asumiendo que el botón A está conectado al pin 3
-# speaker = Speaker() # Asumiendo una clase o función para controlar el sonido
-
-print("Programa iniciado. Esperando la pulsación del botón A...")
+# --- Inicio del programa principal ---
+print("El sistema está listo. Pulsa la tecla 'A' y Enter para activar el LED y el RINGTONE.")
+print("Pulsa Ctrl+C en cualquier momento para salir.")
 
 while True:
-    # Simulación de la lectura del botón A
-    # En un microcontrolador real, esto sería una lectura de un pin digital
-    button_A_pressed = input("Pulsa 'A' y Enter para simular la pulsación del botón A: ").strip().upper()
+    # Simulamos la lectura del botón. En un sistema real, esto sería la lectura de un pin digital.
+    accion_usuario = input("\nEsperando la pulsación del botón A... (Introduce 'A' y pulsa Enter): ").strip().upper()
 
-    if button_A_pressed == 'A':
-        print("Botón A pulsado. Encendiendo LED y reproduciendo RINGTONE...")
-        # Encender el LED
-        # Esto es una simulación; en hardware real se activaría el pin del LED
-        print("LED: ON")
+    # Verificamos si el usuario "pulsó" el botón A
+    if accion_usuario == 'A':
+        print("Botón A pulsado. ¡Activando!")
 
-        # Reproducir el sonido RINGTONE
-        # Esto es una simulación; en hardware real se activaría la reproducción de sonido
+        # Simula el encendido del LED
+        print("LED: ENCENDIDO")
+
+        # Simula la reproducción del sonido RINGTONE
         print("Sonido: RINGTONE reproduciéndose...")
 
-        time.sleep(5) # Esperar 5 segundos
+        # Esperamos 5 segundos
+        time.sleep(5)
 
-        # Apagar el LED
-        print("LED: OFF")
+        # Simula el apagado del LED
+        print("LED: APAGADO")
         print("Sonido: RINGTONE terminado.")
-        print("Esperando la próxima pulsación del botón A...")
+        print("Proceso completado. Esperando una nueva pulsación del botón A.")
+
     else:
-        print("Pulsación no reconocida. Intenta de nuevo.")
+        print("Entrada no reconocida. Por favor, pulsa solo 'A'.")
+
+    # Pequeña pausa antes de volver a pedir la entrada para evitar bucles muy rápidos
+    time.sleep(0.5)
+
+# --- Manejo de la salida del programa ---
+    try:
+        # Esto es un truco para que el bucle siga pidiendo entrada,
+        # pero permite que Ctrl+C lo detenga limpiamente.
+        pass
+    except KeyboardInterrupt:
+        print("\nPrograma terminado por el usuario.")
+        break
+
+# --- Fin del programa principal ---
+print("¡Hasta pronto!")
