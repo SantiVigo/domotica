@@ -3,20 +3,24 @@ Autores: Santiago Pereira
 Data: 30/04/2025
 """
 
-Copy# Importing the datetime module to get the current time
-import datetime
+import time
 
-# Defining the day and night time ranges
-daytime = range(6, 18)  # Assuming daytime from 6:00 to 17:59
-nighttime = range(18, 6+24) # Assuming nighttime from 18:00 to 5:59 the next day
+# Simulación sencilla de hora actual (0-23)
+hora = 20  # Cambia este valor para probar diferente momentos del día
 
-# Getting the current time
-current_time = datetime.datetime.now().time()
+while True:
+    if 6 <= hora < 18:
+        # Día - LED apagado
+        led_blanco = False
+        print("Es de día, LED blanco apagado.")
+    else:
+        # Noche - LED encendido
+        led_blanco = True
+        print("Es de noche, LED blanco encendido.")
 
-# Checking if it's night or day
-if current_time.hour in nighttime:
-    print("It's night time. Turning on the white LED.")
-    # Code to turn on the white LED goes here
-else:
-    print("It's day time. Turning off the white LED.")
-    # Code to turn off the white LED goes here
+    time.sleep(5)
+
+    # Para simular cambio de hora (incrementar cada iteración)
+    hora += 1
+    if hora >= 24:
+        hora = 0
